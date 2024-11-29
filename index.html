@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <title>IBoard</title>
+  </head>
+  <body>
+    <section>
+      <canvas id="canvas"></canvas>
+    </section>
+
+    <section class="tools-section">
+      <div class="tools">
+        <button data-event="undo" title="undo" class="fas fa-undo"></button>
+        <button data-event="redo" title="redo" class="fas fa-redo"></button>
+        <button
+          data-event="save"
+          title="save"
+          class="fas fa-save btn--blue"
+        ></button>
+        <button
+          data-event="draw-tool"
+          title="draw mode"
+          class="selected fas fa-pencil"
+        ></button>
+        <button
+          data-event="erase-tool"
+          title="erase mode"
+          class="fas fa-eraser"
+        ></button>
+        <button data-event="clear" title="clear board">clear</button>
+
+        <div class="line-width">
+          <div class="line" style="--line-width: 5px"></div>
+          <input type="range" id="line-range" min="1" max="10" />
+        </div>
+
+        <div class="colors" data-event="choose-color">
+          <input
+            type="radio"
+            value="#111122"
+            class="color"
+            style="--color: #111122"
+            name="cl"
+            checked
+          />
+          <input
+            type="radio"
+            value="#ff0000"
+            class="color"
+            style="--color: #ff0000"
+            name="cl"
+          />
+          <input
+            type="radio"
+            value="#00ff00"
+            class="color"
+            style="--color: #00ff00"
+            name="cl"
+          />
+          <input
+            type="radio"
+            value="#009fff"
+            class="color"
+            style="--color: #009fff"
+            name="cl"
+          />
+          <input
+            type="radio"
+            value="#0fffff"
+            class="color"
+            style="--color: #0fffff"
+            name="cl"
+          />
+          <input
+            type="radio"
+            value="#ffee00"
+            class="color"
+            style="--color: #ffee00"
+            name="cl"
+          />
+        </div>
+      </div>
+    </section>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

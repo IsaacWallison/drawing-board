@@ -1,0 +1,132 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --light: rgb(95% 95% 98%);
+
+  --border: 1px solid rgb(0 0 0 / 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  overflow: hidden;
+}
+
+a {
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+button {
+  border-radius: 8px;
+  border: var(--border);
+  padding: 0.6em 1.2em;
+  font-size: clamp(1.1em, 4vw, 1.5em);
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+button.btn--blue {
+  background-color: #224466;
+  color: var(--light);
+}
+
+#canvas {
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  cursor: crosshair;
+}
+
+.selected {
+  color: var(--light);
+  background-color: #646cff;
+  outline: 2px solid rgb(0 0 0 / 0.2);
+  transform: scale(0.95);
+}
+
+.tools {
+  display: flex;
+  gap: 1em;
+  justify-content: start;
+  align-items: center;
+  border: var(--border);
+  padding: 1em;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  overflow-x: auto;
+  background-color: var(--light);
+}
+
+@media (min-width: 850px) {
+  .tools {
+    justify-content: center;
+  }
+}
+
+.colors {
+  display: flex;
+  gap: 1em;
+}
+
+.color {
+  position: relative;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.color::before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background-color: var(--color);
+}
+
+.color:checked::before {
+  width: 80%;
+  height: 80%;
+}
+
+.line-width {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.line {
+  width: 90%;
+  height: var(--line-width);
+  border-radius: 0.5em;
+  background-color: #224466;
+  margin: 0 auto;
+}
