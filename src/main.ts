@@ -40,9 +40,6 @@ window.onload = () => {
     deviceType: 'mouse',
     toolSelected: 'draw',
     isHoldingMouseButton: false,
-    lineColor: colors.querySelector<HTMLInputElement>('input:checked')!.value,
-    lineWidth: +lineRange.value,
-    colors: [],
     doneHistory: [],
     undoneHistory: [],
   };
@@ -81,20 +78,24 @@ window.onload = () => {
   };
 
   const redrawCanvas = () => {
-    const history = applicationState.doneHistory;
-    for (let i = 0; i < history.length; i++) {
-      context.strokeStyle = applicationState.colors[i];
+    applicationState.doneHistory.forEach(
+      ({ lineColor, lineWidth, starterCoordinates, coordinates }) => {
+        context.strokeStyle = lineColor;
+        context.lineWidth = lineWidth;
 
-      context.beginPath();
+        context.beginPath();
+        context.moveTo(starterCoordinates.x, starterCoordinates.y);
 
-      context.moveTo(history[i][0], history[i][1]);
-
-      for (let j = 2; j < history[i].length; j += 2) {
-        context.lineTo(history[i][j], history[i][j + 1]);
-        context.stroke();
+        coordinates.forEach(({ x, y }) => {
+          context.lineTo(x, y);
+          context.stroke();
+        });
       }
-    }
+    );
   };
+
+  const clearCanvas = () =>
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
   const init = () => {
     detectDevice();
@@ -107,8 +108,9 @@ window.onload = () => {
 
         applicationState.isHoldingMouseButton = true;
 
-        context.lineWidth = applicationState.lineWidth;
-        context.strokeStyle = applicationState.lineColor ?? context.strokeStyle;
+        context.lineWidth = +lineRange.value;
+        context.strokeStyle =
+          colors.querySelector<HTMLInputElement>('input:checked')!.value;
 
         context.beginPath();
 
@@ -126,7 +128,12 @@ window.onload = () => {
           return;
         }
 
-        applicationState.doneHistory.push([x, y]);
+        applicationState.doneHistory.push({
+          lineColor: context.strokeStyle,
+          lineWidth: context.lineWidth,
+          starterCoordinates: { x, y },
+          coordinates: [],
+        });
 
         context.moveTo(x, y);
       }
@@ -156,7 +163,7 @@ window.onload = () => {
 
         applicationState.doneHistory[
           applicationState.doneHistory.length - 1
-        ].push(x, y);
+        ].coordinates.push({ x, y });
 
         context.lineTo(x, y);
         context.stroke();
@@ -167,8 +174,6 @@ window.onload = () => {
       eventsByDeviceType[applicationState.deviceType].up,
       () => {
         applicationState.isHoldingMouseButton = false;
-
-        applicationState.colors.push(context.strokeStyle as string);
       }
     );
 
@@ -183,13 +188,6 @@ window.onload = () => {
       if (e.target instanceof HTMLInputElement) {
         const line = document.querySelector<HTMLDivElement>('.line')!;
         line.style.setProperty('--line-width', `${e.target.value}px`);
-        applicationState.lineWidth = +e.target.value;
-      }
-    });
-
-    colors.addEventListener('click', (e) => {
-      if (e.target instanceof HTMLInputElement) {
-        applicationState.lineColor = e.target.value;
       }
     });
 
@@ -210,7 +208,9 @@ window.onload = () => {
     });
 
     clearBoard.addEventListener('click', () => {
-      context.clearRect(0, 0, canvas.width, canvas.height);
+      clearCanvas();
+      applicationState.undoneHistory = [];
+      applicationState.doneHistory = [];
     });
 
     save.addEventListener('click', () => {
@@ -225,9 +225,9 @@ window.onload = () => {
     undo.addEventListener('click', () => {
       if (!applicationState.doneHistory.length) return;
 
-      context.clearRect(0, 0, canvas.width, canvas.height);
-
       applicationState.undoneHistory.push(applicationState.doneHistory.pop()!);
+
+      clearCanvas();
 
       redrawCanvas();
     });
@@ -235,9 +235,9 @@ window.onload = () => {
     redo.addEventListener('click', () => {
       if (!applicationState.undoneHistory.length) return;
 
-      context.clearRect(0, 0, canvas.width, canvas.height);
-
       applicationState.doneHistory.push(applicationState.undoneHistory.pop()!);
+
+      clearCanvas();
 
       redrawCanvas();
     });

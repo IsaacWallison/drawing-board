@@ -75,7 +75,7 @@ button.btn--blue {
   justify-content: start;
   align-items: center;
   border: var(--border);
-  padding: 1em;
+  padding: 2.6em 2em;
   position: fixed;
   bottom: 0;
   width: 100%;
